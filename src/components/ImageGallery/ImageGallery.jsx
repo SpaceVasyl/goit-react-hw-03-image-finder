@@ -1,19 +1,25 @@
-import React from 'react';
+import { Component } from 'react';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
-// import css from './Gallery.module.css';
+import { getPhotos } from '../../fetch/getPhotos';
 
-export const ImageGallery = () => {
-    
-  return (
-    <ul className='gallery'>
-<ImageGalleryItem/>
-      {/* {images.map(image => (
-        <li key={image.id}>
-          <img src={image.url} alt={image.alt} />
-        </li>
-      ))} */}
-    </ul>
-  );
-};
+export class ImageGallery extends Component {
+  state = {
+    photos: [],
+  };
 
-// export default ImageGallery;
+  handleSearch = (inputValue) => {
+    getPhotos(inputValue)
+  };
+
+  render() {
+    const { photos } = this.state;
+
+    return (
+      <ul className='gallery'>
+        {photos.map((photo) => (
+          <ImageGalleryItem key={photo.id} photo={photo} />
+        ))}
+      </ul>
+    );
+  }
+}

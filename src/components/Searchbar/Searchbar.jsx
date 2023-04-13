@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import css from './Searchbar.module.css';
-
 export default class Searchbar extends Component {
   state = {
     inputValue: '',
@@ -13,9 +12,10 @@ export default class Searchbar extends Component {
   handleSubmit = evt => {
     evt.preventDefault();
     const { inputValue } = this.state;
-    console.log(`inputValue: ${inputValue}`);
+    
     this.reset();
     this.props.onSubmit(inputValue);
+    
   };
 
   reset = () => {
