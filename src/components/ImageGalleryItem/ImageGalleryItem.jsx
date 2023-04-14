@@ -1,10 +1,10 @@
 import React from 'react';
 
-const ImageGalleryItem = ({ photo }) => {
-    console.log(photo);
+const ImageGalleryItem = ({ item}) => {
+    
     return (
-      <li className="galleryItem">
-        <img src={photo.webformatURL} alt={photo.tags} />
+      <li className="galleryItem" id={item.id}>
+        <img src={item.webformatURL} alt='images'/>
       </li>
     );
   };

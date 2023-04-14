@@ -12,10 +12,8 @@ export default class Searchbar extends Component {
   handleSubmit = evt => {
     evt.preventDefault();
     const { inputValue } = this.state;
-    
     this.reset();
     this.props.onSubmit(inputValue);
-    
   };
 
   reset = () => {
