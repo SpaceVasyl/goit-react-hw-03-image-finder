@@ -18,7 +18,8 @@ componentDidUpdate(_, prevState){
     this.smallFunction()
 }}
 smallFunction = () => {
-  getPhotos(this.state.inputValue)
+  const pageNumber = 12;
+  getPhotos(this.state.inputValue, pageNumber)
   .then((response) => response.json())
   .then((data) => {
     this.setState({photos:data.hits})
