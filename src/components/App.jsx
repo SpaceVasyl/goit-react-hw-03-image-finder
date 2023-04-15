@@ -55,6 +55,19 @@ this.setState({isModalShown:true, modalPhotoURL: item});
 closeModal = () => {
   this.setState({ isModalShown: false });
 };
+componentDidMount() {
+  document.addEventListener("keydown", this.handleKeyDown);
+}
+
+componentWillUnmount() {
+  document.removeEventListener("keydown", this.handleKeyDown);
+}
+
+handleKeyDown = (evt) => {
+  if (evt.key === "Escape") {
+    this.setState({ isModalShown: false });
+  }
+};
   render() {
     return (
       <div>
