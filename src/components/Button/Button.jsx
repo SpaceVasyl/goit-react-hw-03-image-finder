@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {Component} from 'react';
 
-export const Button = ({props}) => {
-const handleLoadMore = (evt) => {
+export class Button extends Component  {
+handleLoadMore = evt => {
 evt.preventDefault();
-console.log(evt);
+this.setState(this.state.imagesDisplayed + 12)
+console.log(this.state);
 }
 
-    return (<button onClick={this.handleLoadMore}>
+    render(){return (<button onClick={this.props.handleLoadMore}>
         Load more
-    </button>)
+    </button>)}
 }
