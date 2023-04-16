@@ -49,7 +49,6 @@ handleLoadMore = (evt) => {
   })
 }
 imageModal = (item) => {
-console.log(this.state.isModalShown);
 this.setState({isModalShown:true, modalPhotoURL: item});
 }
 closeModal = () => {
