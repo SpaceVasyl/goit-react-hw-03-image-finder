@@ -12,7 +12,7 @@ export class App extends Component {
   state = {
     inputValue: '',
     photos: [],
-    imagesDisplayed: 12,
+    page: 1,
     isModalShown: false,
     modalPhotoURL: '',
     isLoading: false
@@ -26,25 +26,26 @@ componentDidUpdate(_, prevState){
     this.smallFunction()
 }}
 smallFunction = () => {
-  this.setState({ imagesDisplayed: 12 , isLoading: true});
-  getPhotos(this.state.inputValue, this.state.imagesDisplayed)
+  this.setState({isLoading: true, page: 1});
+  getPhotos(this.state.inputValue, this.state.page)
   .then((response) => response.json())
   .then((data) => {
-    this.setState({photos:data.hits, isLoading: false})
+    this.setState({photos:data.hits})
     return data;
   })
   .catch((error) => {
     console.log(error);
-    this.setState({ isLoading: false });
   })
+  .finally(()=>this.setState({ isLoading: false }))
 }
 handleLoadMore = (evt) => {
   evt.preventDefault();
-  this.setState(prevState => ({ imagesDisplayed: prevState.imagesDisplayed + 12 , isLoading: true}), () => {
-    getPhotos(this.state.inputValue, this.state.imagesDisplayed)
+  this.setState(prevState => ({ page: prevState.page + 1 , isLoading: true}), () => {
+    getPhotos(this.state.inputValue, this.state.page)
       .then((response) => response.json())
       .then((data) => {
-        this.setState({photos:data.hits, isLoading: false })
+        this.setState({photos : [...this.state.photos , ...data.hits]})
+        this.setState({isLoading: false})
         return data;
       })
       .catch((error) => {
@@ -76,12 +77,9 @@ handleKeyDown = (evt) => {
     return (
       <div>
         <Searchbar onSubmit={this.handleSearch} />
-        {this.state.isLoading ? (
-        <Loader/>
-      ) : (
         <ImageGallery image={this.state.photos} imageModal={this.imageModal} />
-      )}
-        {this.state.photos.length > 0 ? <Button handleLoadMore={this.handleLoadMore} state={this.state.imagesDisplayed}/>: <></>}
+        {this.state.isLoading && <Loader/> }
+        {this.state.photos.length > 0 ? <Button handleLoadMore={this.handleLoadMore} state={this.state.page}/>: <></>}
         {this.state.isModalShown === true ? <Modal modalPhotoURL={this.state.modalPhotoURL} onClose={this.closeModal}/> : null}
       </div>
     );
