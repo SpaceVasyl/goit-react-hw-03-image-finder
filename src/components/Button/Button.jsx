@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import css from './Button.module.css'
+import css from './Button.module.css';
+import PropTypes from "prop-types";
 export class Button extends Component  {
 handleLoadMore = evt => {
 evt.preventDefault();
@@ -11,3 +12,7 @@ console.log(this.state);
         Load more
     </button>)}
 }
+Button.propTypes = {
+    handleLoadMore: PropTypes.func.isRequired,
+    state: PropTypes.number.isRequired,
+  };

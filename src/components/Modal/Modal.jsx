@@ -1,5 +1,6 @@
 import React from 'react';
 import css from './Modal.module.css'
+import PropTypes from 'prop-types';
 export const Modal = ({modalPhotoURL ,onClose}) => {
     
     return (
@@ -8,3 +9,7 @@ export const Modal = ({modalPhotoURL ,onClose}) => {
           <img src={modalPhotoURL } alt="large" style={css}/>
         </div>
       </div>)}
+      Modal.propTypes = {
+        modalPhotoURL: PropTypes.string.isRequired,
+        onClose: PropTypes.func.isRequired
+      };

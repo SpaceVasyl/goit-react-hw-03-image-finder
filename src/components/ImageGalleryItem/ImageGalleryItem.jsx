@@ -1,5 +1,6 @@
 import React from 'react';
-import css from './ImageGalleryItem.module.css'
+import css from './ImageGalleryItem.module.css';
+import PropTypes from "prop-types";
 const ImageGalleryItem = ({item, imageModal}) => {
   const handleImageClick = (e) => {
     imageModal(e.target.alt);
@@ -13,3 +14,12 @@ const ImageGalleryItem = ({item, imageModal}) => {
 };
 
 export default ImageGalleryItem;
+
+ImageGalleryItem.propTypes = {
+  item: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    webformatURL: PropTypes.string.isRequired,
+    largeImageURL: PropTypes.string.isRequired,
+  }).isRequired,
+  imageModal: PropTypes.func.isRequired,
+};

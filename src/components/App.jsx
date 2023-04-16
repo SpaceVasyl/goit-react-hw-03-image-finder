@@ -5,7 +5,8 @@ import Searchbar from './Searchbar/Searchbar';
 import { getPhotos } from '../fetch/getPhotos';
 import { Button } from './Button/Button';
 import { Modal } from './Modal/Modal';
-import css from './Modal/Modal.module.css'
+import {Loader} from './Loader/Loader';
+
 
 export class App extends Component {
   state = {
@@ -13,7 +14,8 @@ export class App extends Component {
     photos: [],
     imagesDisplayed: 12,
     isModalShown: false,
-    modalPhotoURL: ''
+    modalPhotoURL: '',
+    isLoading: false
   };
 
   handleSearch = (inputValue) => {
@@ -24,29 +26,32 @@ componentDidUpdate(_, prevState){
     this.smallFunction()
 }}
 smallFunction = () => {
-  this.setState({ imagesDisplayed: 12 });
+  this.setState({ imagesDisplayed: 12 , isLoading: true});
   getPhotos(this.state.inputValue, this.state.imagesDisplayed)
   .then((response) => response.json())
   .then((data) => {
-    this.setState({photos:data.hits})
+    this.setState({photos:data.hits, isLoading: false})
     return data;
   })
   .catch((error) => {
     console.log(error);
+    this.setState({ isLoading: false });
   })
 }
 handleLoadMore = (evt) => {
   evt.preventDefault();
-  this.setState(prevState => ({ imagesDisplayed: prevState.imagesDisplayed + 12 })); // Increment the number of images displayed by 12
-  getPhotos(this.state.inputValue, this.state.imagesDisplayed)
-  .then((response) => response.json())
-  .then((data) => {
-    this.setState({photos:data.hits})
-    return data;
-  })
-  .catch((error) => {
-    console.log(error);
-  })
+  this.setState(prevState => ({ imagesDisplayed: prevState.imagesDisplayed + 12 , isLoading: true}), () => {
+    getPhotos(this.state.inputValue, this.state.imagesDisplayed)
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({photos:data.hits, isLoading: false })
+        return data;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({ isLoading: false });
+      })
+  });
 }
 imageModal = (item) => {
 this.setState({isModalShown:true, modalPhotoURL: item});
@@ -71,7 +76,11 @@ handleKeyDown = (evt) => {
     return (
       <div>
         <Searchbar onSubmit={this.handleSearch} />
-        <ImageGallery  image={this.state.photos} imageModal={this.imageModal}/>
+        {this.state.isLoading ? (
+        <Loader/>
+      ) : (
+        <ImageGallery image={this.state.photos} imageModal={this.imageModal} />
+      )}
         {this.state.photos.length > 0 ? <Button handleLoadMore={this.handleLoadMore} state={this.state.imagesDisplayed}/>: <></>}
         {this.state.isModalShown === true ? <Modal modalPhotoURL={this.state.modalPhotoURL} onClose={this.closeModal}/> : null}
       </div>
