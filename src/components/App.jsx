@@ -79,7 +79,7 @@ handleKeyDown = (evt) => {
         <Searchbar onSubmit={this.handleSearch} />
         <ImageGallery image={this.state.photos} imageModal={this.imageModal} />
         {this.state.isLoading && <Loader/> }
-        {this.state.photos.length > 0 ? <Button handleLoadMore={this.handleLoadMore} state={this.state.page}/>: <></>}
+        {this.state.photos.length > 0 && this.state.photos.length % 12 === 0 && <Button handleLoadMore={this.handleLoadMore} state={this.state.page} />}
         {this.state.isModalShown === true ? <Modal modalPhotoURL={this.state.modalPhotoURL} onClose={this.closeModal}/> : null}
       </div>
     );
