@@ -15,7 +15,8 @@ export class App extends Component {
     page: 1,
     isModalShown: false,
     modalPhotoURL: '',
-    isLoading: false
+    isLoading: false,
+    fetchArrayLength: 0
   };
 
   handleSearch = (inputValue) => {
@@ -30,7 +31,7 @@ smallFunction = () => {
   getPhotos(this.state.inputValue, this.state.page)
   .then((response) => response.json())
   .then((data) => {
-    this.setState({photos:data.hits})
+    this.setState({photos:data.hits, fetchArrayLength: data.hits.length})
     return data;
   })
   .catch((error) => {
@@ -45,7 +46,7 @@ handleLoadMore = (evt) => {
       .then((response) => response.json())
       .then((data) => {
         this.setState({photos : [...this.state.photos , ...data.hits]})
-        this.setState({isLoading: false})
+        this.setState({isLoading: false, fetchArrayLength: data.hits.length})
         return data;
       })
       .catch((error) => {
@@ -73,13 +74,13 @@ handleKeyDown = (evt) => {
     this.setState({ isModalShown: false });
   }
 };
-  render() {
+  render() {console.log(this.state.fetchArrayLength);
     return (
       <div>
         <Searchbar onSubmit={this.handleSearch} />
         <ImageGallery image={this.state.photos} imageModal={this.imageModal} />
         {this.state.isLoading && <Loader/> }
-        {this.state.photos.length > 0 && this.state.photos.length % 12 === 0 && <Button handleLoadMore={this.handleLoadMore} state={this.state.page} />}
+        {this.state.photos.length > 0 && this.state.fetchArrayLength === 12  && <Button handleLoadMore={this.handleLoadMore} state={this.state.page} />}
         {this.state.isModalShown === true ? <Modal modalPhotoURL={this.state.modalPhotoURL} onClose={this.closeModal}/> : null}
       </div>
     );
